@@ -18,10 +18,10 @@ CLoginDialog::~CLoginDialog() {
 }
 
 void CLoginDialog::DoDataExchange(CDataExchange* pDX) {
-	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT_USERNAME, usernameEdit);
 	DDX_Control(pDX, IDC_EDIT_PASSWORD, passwordEdit);
 	DDX_Control(pDX, IDC_LOGIN_BUTTON, loginButton);
+	CDialogEx::DoDataExchange(pDX);
 }
 
 
@@ -52,6 +52,7 @@ void CLoginDialog::onResult(CourseHelper::LOGIN_RESULT result) {
 	switch (result) {
 	case CourseHelper::LOGIN_RESULT::RESULT_LOGIN_OK:
 		courseHelper.refreshCourse(callback);
+		//EndDialog(0);
 		return;
 	case CourseHelper::LOGIN_RESULT::RESULT_LOGIN_FAILT:
 		MessageBox(GetString(IDS_LOGIN_FAIL));

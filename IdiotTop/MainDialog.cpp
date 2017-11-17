@@ -8,7 +8,7 @@
 IMPLEMENT_DYNAMIC(CMainDialog, CDialogEx)
 
 CMainDialog::CMainDialog(CWnd* pParent /*=NULL*/) : CDialogEx(CMainDialog::IDD, pParent) {
-	loginDialog = new CLoginDialog(this);
+	loginDialog = new CLoginDialog(this, this);
 }
 
 CMainDialog::~CMainDialog(){
@@ -31,6 +31,8 @@ void CMainDialog::onResult(CourseHelper::OTHER_RESULT result) {
 	switch (result) {
 	case CourseHelper::OTHER_RESULT::RESULT_OK:
 		loginDialog->EndDialog(0);
+		//TODO: there may be a bug that causes fc
+		//textArea.SetWindowText(TEXT("TTTTTTTTTTTTTTTTTTTTTT"));
 		startButton.EnableWindow();
 		getAnswerLibButton.EnableWindow();
 		courseList = courseHelper.getList();
