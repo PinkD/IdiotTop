@@ -20,6 +20,8 @@ public:
 	afx_msg void OnBnClickedStart();
 	afx_msg void OnBnClickedGetAnswers();
 	afx_msg void OnBnClickedAboutAuthor();
+	afx_msg void OnNMClickCourseList(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg LRESULT OnTrayMessage(WPARAM wParam, LPARAM lParam);
 	virtual void OnCancel();
 	inline void printMessage(CString content);
 	inline void appendMessage(CString content);
@@ -46,7 +48,7 @@ protected:
 private:
 	void addToTray();
 	inline void updateTrayTip();
-	afx_msg LRESULT OnTrayMessage(WPARAM wParam, LPARAM lParam);
+	int itemId;
 
 	NOTIFYICONDATA nid;
 	inline void showWindow();

@@ -144,19 +144,18 @@ void CourseHelper::cancelAnswerCourse() {
 	stop = TRUE;
 }
 
-void CourseHelper::answerAllCourse(Callback<CString> *textCallback) {
+void CourseHelper::answerCourse(Callback<CString> *textCallback, int index) {
 	setStatus(STATUS_ANSWER);
 	this->textCallback = textCallback;
 	stop = FALSE;
-	SubmitThreadpoolWork(CreateThreadpoolWork(answerAllCourseAsync, this, NULL));
+	selected = index;
+	SubmitThreadpoolWork(CreateThreadpoolWork(answerCourseAsync, this, NULL));
 }
 
-void CourseHelper::answerAllCourseAsync(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work) {//刷题子线程
+void CourseHelper::answerCourseAsync(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work) {//刷题子线程
 	CourseHelper *courseHelper = (CourseHelper *)context;
-	for (int i = 0; i < courseHelper->courseList.GetCount(); i++) {
-		returnIfStop();
-		courseHelper->answerCourse(*courseHelper->courseList[i]);
-	}
+	returnIfStop();
+	courseHelper->answerCourse(*courseHelper->courseList[courseHelper->selected]);
 	courseHelper->setStatus(STATUS_DONE);
 }
 

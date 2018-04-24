@@ -64,6 +64,7 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\IdiotTop.ico"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -88,7 +89,7 @@ FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     PUSHBUTTON      "登录",IDC_LOGIN_BUTTON,8,6,42,21,WS_GROUP
     PUSHBUTTON      "开始刷题",IDC_START_BUTTON,55,6,41,21,WS_DISABLED
-    CONTROL         "",IDC_COURSE_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,8,33,394,111
+    CONTROL         "",IDC_COURSE_LIST,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,8,33,394,111
     PUSHBUTTON      "关于软件",IDC_ABOUT_AUTHOR_BUTTON,361,6,42,21
     PUSHBUTTON      "提取题库",IDC_GET_ANSWERS_BUTTON,312,6,42,21,WS_DISABLED | WS_GROUP
     EDITTEXT        IDC_PROGRESS_TEXT,8,161,394,82,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | 0x200,WS_EX_STATICEDGE

@@ -28,12 +28,12 @@ void CMainDialog::appendMessage(CString content){
 
 void CMainDialog::onResult(CourseHelper::OTHER_RESULT result) {
 	CArray<CourseInfo *> *courseList;
+	auto style = courseListCtrl.GetExtendedStyle();
 	switch (result) {
 	case CourseHelper::OTHER_RESULT::RESULT_OK:
-		loginDialog->EndDialog(0);
-		//TODO: there may be a bug that causes fc
-		//textArea.SetWindowText(TEXT("TTTTTTTTTTTTTTTTTTTTTT"));
-		startButton.EnableWindow();
+		courseListCtrl.SetExtendedStyle(style | LVS_EX_FULLROWSELECT);
+		loginDialog->EndModalLoop(0);
+		courseListCtrl.EnableWindow();
 		getAnswerLibButton.EnableWindow();
 		courseList = courseHelper.getList();
 		if (courseList->IsEmpty()){
@@ -81,6 +81,7 @@ void CMainDialog::onResult(CString result) {
 }
 
 void CMainDialog::DoDataExchange(CDataExchange* pDX){
+	CDialogEx::DoDataExchange(pDX);
 	hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	DDX_Control(pDX, IDC_PROGRESS_TEXT, textArea);
 	DDX_Control(pDX, IDC_LOGIN_BUTTON, loginButton);
@@ -90,7 +91,8 @@ void CMainDialog::DoDataExchange(CDataExchange* pDX){
 	DDX_Control(pDX, IDC_COURSE_LIST, courseListCtrl);
 	textArea.SetWindowText(GetString(IDS_TIPS));
 	addToTray();
-	CDialogEx::DoDataExchange(pDX);
+	updateTrayTip();
+	courseListCtrl.EnableWindow(FALSE);
 }
 
 BEGIN_MESSAGE_MAP(CMainDialog, CDialogEx)
@@ -99,7 +101,7 @@ BEGIN_MESSAGE_MAP(CMainDialog, CDialogEx)
 	ON_BN_CLICKED(IDC_GET_ANSWERS_BUTTON, &CMainDialog::OnBnClickedGetAnswers)
 	ON_BN_CLICKED(IDC_ABOUT_AUTHOR_BUTTON, &CMainDialog::OnBnClickedAboutAuthor)
 	ON_MESSAGE(IDM_TRAY, OnTrayMessage)
-	ON_WM_LBUTTONDOWN()
+	ON_NOTIFY(NM_CLICK, IDC_COURSE_LIST, &CMainDialog::OnNMClickCourseList)
 END_MESSAGE_MAP()
 
 void CMainDialog::OnBnClickedLogin() {
@@ -111,7 +113,7 @@ void CMainDialog::OnBnClickedStart() {
 		loginButton.EnableWindow(FALSE);
 		getAnswerLibButton.EnableWindow(FALSE);
 		startButton.SetWindowText(GetString(IDS_STOP));
-		courseHelper.answerAllCourse(this);
+		courseHelper.answerCourse(this, itemId);
 		textArea.SetWindowText(TEXT(""));
 	} else {
 		courseHelper.cancelAnswerCourse();
@@ -211,4 +213,21 @@ void CMainDialog::updateTrayTip() {
 BOOL CMainDialog::DestroyWindow(){
 	Shell_NotifyIcon(NIM_DELETE, &nid);
 	return CDialogEx::DestroyWindow();
+}
+
+
+
+void CMainDialog::OnNMClickCourseList(NMHDR *pNMHDR, LRESULT *pResult) {
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	*pResult = 0;
+	if (pNMItemActivate->iItem == -1) {
+		if (startButton.IsWindowEnabled()) {
+			startButton.EnableWindow(FALSE);
+		}
+	} else {
+		if (!startButton.IsWindowEnabled()) {
+			startButton.EnableWindow();
+		}
+	}
+	itemId = pNMItemActivate->iItem;
 }

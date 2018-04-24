@@ -43,7 +43,7 @@ public:
 
 	void login(CString username, CString password, Callback<LOGIN_RESULT> *callback);
 	void refreshCourse(Callback<CourseHelper::OTHER_RESULT> *callback);
-	void answerAllCourse(Callback<CString> *textCallback);
+	void answerCourse(Callback<CString> *textCallback, int index);
 	void getAllAnswerLib(Callback<CString> *textCallback);
 	void cancelAnswerCourse();
 	void cancelGetAnswerLib();
@@ -65,6 +65,7 @@ private:
 	CString DWRSESSIONID;
 	User user;
 	static BOOL stop;
+	int selected;
 
 
 	CourseInfo *currentCourse;
@@ -103,7 +104,7 @@ private:
 
 	static void CALLBACK loginAsync(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work);
 	static void CALLBACK refreshCourseAsync(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work);
-	static void CALLBACK answerAllCourseAsync(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work);
+	static void CALLBACK answerCourseAsync(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work);
 	static void CALLBACK getAllAnswerLibAsync(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work);
 
 	static const int DELAY_TIME = 1000;

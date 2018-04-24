@@ -15,13 +15,14 @@ CLoginDialog::CLoginDialog(Callback<CourseHelper::OTHER_RESULT> *callback, CWnd*
 }
 
 CLoginDialog::~CLoginDialog() {
+	OutputDebugString(TEXT("destructor test\n"));
 }
 
 void CLoginDialog::DoDataExchange(CDataExchange* pDX) {
+	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_EDIT_USERNAME, usernameEdit);
 	DDX_Control(pDX, IDC_EDIT_PASSWORD, passwordEdit);
 	DDX_Control(pDX, IDC_LOGIN_BUTTON, loginButton);
-	CDialogEx::DoDataExchange(pDX);
 }
 
 
