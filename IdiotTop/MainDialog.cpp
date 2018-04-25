@@ -20,10 +20,9 @@ void CMainDialog::printMessage(CString content){
 }
 
 void CMainDialog::appendMessage(CString content){
-	CString str;
-	textArea.GetWindowText(str);
-	str += content;
-	printMessage(str);
+	int end = textArea.GetWindowTextLength();
+	textArea.SetSel(end, end);
+	textArea.ReplaceSel(content);;
 }
 
 void CMainDialog::onResult(CourseHelper::OTHER_RESULT result) {

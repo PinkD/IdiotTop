@@ -31,7 +31,7 @@ public:
 
 protected:
 
-	CStatic textArea;
+	CEdit textArea;
 	CButton loginButton;
 	CButton startButton;
 	CButton getAnswerLibButton;
