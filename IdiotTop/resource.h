@@ -41,6 +41,7 @@
 #define IDS_URL_DO                      10015
 #define IDS_URL_WK_INDEX                10016
 #define IDS_URL_WK_LEARN                10017
+#define IDS_URL_LOAD_PAGE               10018
 #define IDS_HEADER_REF_LOGIN            10021
 #define IDS_HEADER_REF_STUDY            10022
 #define IDS_HEADER_REF_LEARN            10023
@@ -56,6 +57,8 @@
 #define IDS_POST_DATA_LEARN_STATUS      10036
 #define IDS_POST_DATA_ANSWER            10037
 #define IDS_POST_DATA_MEDIA             10038
+#define IDS_POST_DATA_LOAD_PAGE         10039
+#define IDS_POST_DATA_TOP_DH_NUM        10040
 #define IDS_SKVersion                   10051
 
 // Next default values for new objects

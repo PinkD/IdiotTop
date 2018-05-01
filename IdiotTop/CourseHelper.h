@@ -84,6 +84,7 @@ private:
 
 	BOOL refreshCourseGrade(CString courseId);
 	BOOL getSection(CString courseId, CStringArray *sectionId, CStringArray *sectionName);
+	void loadSection(CString courseId, CString sectionId);
 	CString getSectionStatus(CString courseId, CString sectionId, int batchId);
 	BOOL backupCourse(CourseInfo *course);
 	BOOL commitCourse(CourseInfo *course);

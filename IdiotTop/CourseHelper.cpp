@@ -22,8 +22,8 @@ void CALLBACK CourseHelper::loginAsync(PTP_CALLBACK_INSTANCE instance, PVOID con
 
 #ifdef _DEBUG
 	//For debug, skip login repeatly
-	//courseHelper->setStatus(STATUS_LOGIN);
-	//return courseHelper->loginCallback->onResult(RESULT_LOGIN_OK);
+	courseHelper->setStatus(STATUS_LOGIN);
+	return courseHelper->loginCallback->onResult(RESULT_LOGIN_OK);
 #endif
 
 	CString response;
@@ -161,9 +161,9 @@ void CourseHelper::answerCourseAsync(PTP_CALLBACK_INSTANCE instance, PVOID conte
 
 
 void CourseHelper::answerCourse(CourseInfo course) {//刷某节课
-	CStringArray allSectionId;//每个课程里面每节的ID
-	CStringArray allSectionName;//每个课程里面每节的名字
-	CStringArray allTimeSection;//每个课程里面没刷时间的节的名字
+	CStringArray allSectionId;//课程里面每节的ID
+	CStringArray allSectionName;//课程里面每节的名字
+	CStringArray allTimeSection;//课程里面没刷时间的节的名字
 
 	if (getSection(course.getId(), &allSectionId, &allSectionName)) {//获取所有章节
 		answerAllSection(course, allSectionId, allSectionName, &allTimeSection);
@@ -214,10 +214,14 @@ void CourseHelper::answerSection(CourseInfo course, CString sectionId, CString s
 	CString sectionStatus;
 	BOOL answered = FALSE;
 	BOOL replied = FALSE;
+	BOOL timed = FALSE;
 
 	courseAnswer = readAnswerFromFile(TEXT("BinaryAnswerLibrary\\") + course.getId() + TEXT(".") + course.getName() + TEXT(".txt"));//读取课程答案
-	sectionStatus = getSectionStatus(course.getId(), sectionId, 1);
-	if (sectionStatus.Find(TEXT("OK</strong> \\r\\n                 <span class=\\\"explain_rate\\\"><a href=\\\"javascript:;\\\" onclick=\\\"atPage(\\\'时间说明")) == -1) {//时间没刷完，加入待刷队列
+	loadSection(course.getId(), sectionId);
+	sectionStatus = getSectionStatus(course.getId(), sectionId, 2);
+	if (sectionStatus.Find(TEXT("OK</strong> \\r\\n                 <span class=\\\"explain_rate\\\"><a href=\\\"javascript:;\\\" onclick=\\\"atPage(\\\'时间说明")) != -1) {//时间没刷完，加入待刷队列
+		timed = TRUE;
+	} else {
 		allTimeSection->Add(TEXT("|") + course.getId() + TEXT("|") + course.getName() + TEXT("|") + sectionId + TEXT("|") + sectionName + TEXT("|"));
 	}
 	if (sectionStatus.Find(TEXT("OK</strong> \\r\\n                 <span class=\\\"explain_rate\\\"><a href=\\\"javascript:;\\\" onclick=\\\"atPage(\\\'习题说明")) != -1) {//习题刷过了
@@ -227,10 +231,11 @@ void CourseHelper::answerSection(CourseInfo course, CString sectionId, CString s
 		replied = TRUE;
 	}
 
-	if (answered == TRUE && replied == TRUE) {
+	if (answered && replied && timed) {
 		textCallback->onResult(TEXT("\r\n本节已完成：") + course.getName() + TEXT(" ") + sectionName);
 		return;//全部刷完了就返回
 	}
+
 	//开始获取本节的所有内容，包括媒体评价和习题
 	CString header = GetString(IDS_HEADER_REF_LEARN);
 	header.Replace(TEXT("`courseId`"), course.getId());
@@ -241,7 +246,7 @@ void CourseHelper::answerSection(CourseInfo course, CString sectionId, CString s
 	postData.Replace(TEXT("`sectionId`"), sectionId);
 	response = httpClient.Post(GetString(IDS_BASE_URL) + GetString(IDS_URL_COMMON), postData);
 
-	if (replied != TRUE) {
+	if (!replied) {
 		mediaReply(response, course.getName(), sectionName);//先媒体评价
 	}
 
@@ -333,6 +338,7 @@ void CourseHelper::initPostTime(CStringArray &allTimeSection) {
 		sectionId = SubString(section, TEXT("|"), TEXT("|"), &iPos);
 		sectionName = SubString(section, TEXT("|"), TEXT("|"), &iPos);
 
+		//loadSection(courseId, sectionId);
 		postTime(courseId, courseName, sectionId, sectionName);
 		refreshCourseGrade(courseId);
 	}
@@ -340,7 +346,7 @@ void CourseHelper::initPostTime(CStringArray &allTimeSection) {
 
 void CourseHelper::postTime(CString courseId, CString courseName, CString sectionId, CString sectionName) {
 	CString response;
-	int begin = 1;
+	int begin = 2;
 	int batchId = begin;
 	CString lastTime = TEXT("---");//上次剩余时间
 
@@ -387,8 +393,9 @@ void CourseHelper::postTime(CString courseId, CString courseName, CString sectio
 		postData.Replace(TEXT("`batchId`"), fmt);
 		response = httpClient.Post(GetString(IDS_BASE_URL) + GetString(IDS_URL_COMMON), postData);
 		if (response.Find(TEXT("flag:1")) == -1) {
+			textCallback->onResult(TEXT("\r\n好像没有续成功= =(如果一直是显示这个，那就凉了)\r\n") + courseName + TEXT(" ") + sectionName);
 #ifdef _DEBUG
-			OutputDebugString(TEXT("POST时间出错：") + courseName + TEXT(" ") + sectionName + TEXT("\n"));
+			OutputDebugString(TEXT("POST时间出错：") + courseName + TEXT(" ") + sectionName + TEXT("\r\n"));
 #endif
 		} else {
 			textCallback->onResult(TEXT("\r\n续了15秒：") + courseName + TEXT(" ") + sectionName);
@@ -662,6 +669,25 @@ BOOL CourseHelper::getSection(CString courseId, CStringArray *sectionId, CString
 		pos1 = 0;
 	}
 	return TRUE;
+}
+
+void CourseHelper::loadSection(CString courseId, CString sectionId) {
+	CString s;
+	CString response;
+	CString header = GetString(IDS_HEADER_REF_LEARN);
+	header.Replace(TEXT("`courseId`"), courseId);
+	header.Replace(TEXT("`sectionId`"), sectionId);
+	s = header.Mid(9, header.GetLength() - 9);
+	s = httpClient.Get(s);
+	httpClient.AddSendHeader(header);
+	CString postData = GetString(IDS_POST_DATA_LOAD_PAGE) + getScriptSessionId();
+	postData.Replace(TEXT("`courseId`"), courseId);
+	postData.Replace(TEXT("`sectionId`"), sectionId);
+	response = httpClient.Post(GetString(IDS_BASE_URL) + GetString(IDS_URL_LOAD_PAGE), postData);
+	postData = GetString(IDS_POST_DATA_TOP_DH_NUM) + getScriptSessionId();
+	postData.Replace(TEXT("`courseId`"), courseId);
+	postData.Replace(TEXT("`sectionId`"), sectionId);
+	response = httpClient.Post(GetString(IDS_BASE_URL) + GetString(IDS_URL_COMMON), postData);
 }
 
 CString CourseHelper::getSectionStatus(CString courseId, CString sectionId, int batchId) {

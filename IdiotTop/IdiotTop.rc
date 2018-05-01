@@ -231,26 +231,30 @@ STRINGTABLE
 BEGIN
     IDS_URL_WK_INDEX        "wk/index.htm?id=`courseId`"
     IDS_URL_WK_LEARN        "wk/learn.htm?id=`courseId`"
+    IDS_URL_LOAD_PAGE       "js/ajax/call/plaincall/__System.pageLoaded.dwr"
     IDS_HEADER_REF_LOGIN    "Referer: http://www.attop.com/login_pop.htm"
     IDS_HEADER_REF_STUDY    "Referer:http://www.attop.com/user/study.htm"
-    IDS_HEADER_REF_LEARN    "Referer: http://www.attop.com/wk/learn.htm?id=`courseId`&`jid=`sectionId`"
+    IDS_HEADER_REF_LEARN    "Referer: http://www.attop.com/wk/learn.htm?id=`courseId`&jid=`sectionId`"
     IDS_HEADER_REF_MEDIA    "Referer: http://www.attop.com/wk/media_pop.htm?id=`mediaId`"
     IDS_LOGIN_IMAGE         "image.jpg"
     IDS_INDEX_HTM           "index.htm"
-    IDS_POST_DATA_GEN_ID    "callCount=1\nc0-scriptName=__System\nc0-methodName=generateId\nc0-id=0\nbatchId=0\ninstanceId=0\npage=%2Findex.htm\nscriptSessionId=\nwindowName=\n"
+    IDS_POST_DATA_GEN_ID    "callCount=1\nwindowName=\nc0-scriptName=__System\nc0-methodName=generateId\nc0-id=0\nbatchId=0\ninstanceId=0\npage=%2Findex.htm\nscriptSessionId="
 END
 
 STRINGTABLE
 BEGIN
     IDS_POST_DATA_LOGIN     "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=coreAjax\nc0-id=0\nc0-param0=string:loginWeb\nc0-e1=string:`username`\nc0-e2=string:`password`\n\nc0-e3=string:`authorCode`\nc0-e4=number:2\nc0-param1=Object_Object:{username:reference:c0-e1, password:reference:c0-e2, rand:reference:c0-e3, autoflag:reference:c0-e4}\nc0-param2=string:doLogin\nbatchId=1\ninstanceId=0\npage=%2Flogin_pop.htm\nscriptSessionId="
     IDS_POST_DATA_STUDY     "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=commonAjax\nc0-id=0\nc0-param0=string:getAjaxList\nc0-e1=string:\nc0-e2=string:study.htm\nc0-e3=number:1\nc0-e4=string:showajaxinfo\nc0-param1=Object_Object:{param:reference:c0-e1, pagename:reference:c0-e2, currentpage:reference:c0-e3, showmsg:reference:c0-e4}\nc0-param2=string:doGetAjaxList\nbatchId=2\ninstanceId=0\npage=%2Fuser%2Fstudy.htm\nscriptSessionId="
-    IDS_POST_DATA_TIME      "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=commonAjax\nc0-id=0\nc0-param0=string:getWkOnlineNum\nc0-e1=number:`courseId`\nc0-e2=number:`sectionId`\nc0-param1=Object_Object:{bid:reference:c0-e1, jid:reference:c0-e2}\nc0-param2=string:doGetWkOnlineNum\nbatchId=BatchID\ninstanceId=0\npage=%2Fwk%2Flearn.htm%3Fid%3D`courseId`%26jid%3D`sectionId`\nscriptSessionId="
+    IDS_POST_DATA_TIME      "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=commonAjax\nc0-id=0\nc0-param0=string:getWkOnlineNum2\nc0-e1=number:`courseId`\nc0-e2=number:`sectionId`\nc0-param1=Object_Object:{bid:reference:c0-e1, jid:reference:c0-e2}\nc0-param2=string:doGetWkOnlineNum\nbatchId=`batchId`\ninstanceId=0\npage=%2Fwk%2Flearn.htm%3Fid%3D`courseId`%26jid%3D`sectionId`\nscriptSessionId="
     IDS_POST_DATA_LEARN_LIST 
                             "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=commonAjax\nc0-id=0\nc0-param0=string:getAjaxList2\nc0-e1=string:id%3D`courseId`%26jid%3D`sectionId`\nc0-e2=string:learn_1.htm\nc0-e3=number:1\nc0-e4=string:showajaxinfo2\nc0-param1=Object_Object:{param:reference:c0-e1, pagename:reference:c0-e2, currentpage:reference:c0-e3, id:reference:c0-e4}\nc0-param2=string:doShowAjaxList2\nbatchId=`batchId`\ninstanceId=0\npage=%2Fwk%2Flearn.htm%3Fid%3D`courseId`\nscriptSessionId="
     IDS_POST_DATA_LEARN_STATUS 
                             "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=commonAjax\nc0-id=0\nc0-param0=string:getAjaxList\nc0-e1=string:id%3D`courseId`%26jid%3D`sectionId`\nc0-e2=string:learn.htm\nc0-e3=number:1\nc0-e4=string:showajaxinfo\nc0-param1=Object_Object:{param:reference:c0-e1, pagename:reference:c0-e2, currentpage:reference:c0-e3, showmsg:reference:c0-e4}\nc0-param2=string:doGetAjaxList\nbatchId=2\ninstanceId=0\npage=%2Fwk%2Flearn.htm%3Fid%3D`courseId`%26jid%3D`sectionId`\nscriptSessionId="
     IDS_POST_DATA_ANSWER    "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=dotAjax\nc0-id=0\nc0-param0=string:doSubmitWkXtAll\nc0-e1=number:`courseId`\nc0-e2=number:`sectionId`\nc0-e3=string:`answer`\nc0-param1=Object_Object:{bid:reference:c0-e1, jid:reference:c0-e2, msg:reference:c0-e3}\nc0-param2=string:doCommonReturn\nbatchId=4\ninstanceId=0\npage=%2Fwk%2Flearn.htm%3Fid%3D`courseId`\nscriptSessionId="
     IDS_POST_DATA_MEDIA     "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=dotAjax\nc0-id=0\nc0-param0=string:doWkMediaPj\nc0-e1=number:`mediaId`\nc0-e2=number:3\nc0-param1=Object_Object:{id:reference:c0-e1, type:reference:c0-e2}\nc0-param2=string:doWkMediaPj\nbatchId=1\ninstanceId=0\npage=%2Fwk%2Fmedia_pop.htm%3Fid%3D`mediaId`\nscriptSessionId="
+    IDS_POST_DATA_LOAD_PAGE "callCount=1\nwindowName=\nc0-scriptName=__System\nc0-methodName=pageLoaded\nc0-id=0\nbatchId=0\ninstanceId=0\npage=%2Fwk%2Flearn.htm%3Fid%3D`courseId`%26jid%3D`sectionId`\nscriptSessionId="
+    IDS_POST_DATA_TOP_DH_NUM 
+                            "callCount=1\nwindowName=\nc0-scriptName=zsClass\nc0-methodName=commonAjax\nc0-id=0\nc0-param0=string:getTopDhNum\nc0-param1=Object_Object:{}\nc0-param2=string:doGetTopDhNum\nbatchId=0\ninstanceId=0\npage=%2Fwk%2Flearn.htm%3Fid%3D`courseId`%26jid%3D`sectionId`\nscriptSessionId="
 END
 
 STRINGTABLE
